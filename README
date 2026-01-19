@@ -49,3 +49,21 @@ will need to install a cross-compiler gcc suite capable of producing
 x86 ELF binaries (see https://pdos.csail.mit.edu/6.828/).
 Then run "make TOOLPREFIX=i386-jos-elf-". Now install the QEMU PC
 simulator and run "make qemu".
+
+
+# xv6 启动过程可视化实验
+
+## 一、启动流程说明
+1.  **BIOS 引导阶段**：BIOS 加载 `bootblock` 到物理地址 `0x7C00`，执行 `bootasm.S` 初始化段寄存器、开启 A20 地址线、切换到 32 位保护模式。
+2.  **bootmain 加载内核**：`bootmain.c` 读取磁盘上的 ELF 内核镜像，解析程序段并加载到内存。
+3.  **entry.S 初始化**：设置页表、开启分页、初始化栈，跳转到 `main.c`。
+4.  **内核初始化**：`main.c` 初始化内存管理、进程管理等子系统，启动第一个用户进程 `init`。
+
+## 二、运行结果
+通过在关键阶段添加打印，在 QEMU 中可以清晰看到：
+- `[BOOT] Start`：引导阶段的打印，显示在屏幕底部。
+- `[KERNEL] main() started`：内核初始化完成的标志。
+- 后续内核输出：`cpu0: starting 0`、`init: starting sh` 等，表明系统正常运行。
+
+## 三、个人总结
+通过本次实验，我深入理解了 xv6 从 BIOS 到内核启动的完整流程，掌握了汇编与 C 混合编程、VGA 缓冲区直接操作等底层技术。同时，也体会到了早期引导阶段代码精简的重要性（如 512 字节引导扇区限制），以及调试底层系统的技巧。
