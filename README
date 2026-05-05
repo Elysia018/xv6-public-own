@@ -61,6 +61,14 @@ simulator and run "make qemu".
 3. 内核日志输出：[KERNEL] enter syscall (pid=xx, syscall=write)
 4. 程序正常运行，输出清晰不杂乱
 
+### 第二层（核心任务）✅
+1. **新增系统调用 `int hello(void)`**
+   - 系统调用号：22
+   - 功能：在内核中输出 `hello xv6`
+2. **编写用户测试程序**
+   - 用户态调用 `hello()`
+   - 成功触发内核系统调用
+
 ### 运行方式
 make clean
 make qemu
@@ -70,3 +78,14 @@ make qemu
 - test_write.c
 - user.h
 - Makefile
+
+### 测试命令
+    hello
+### 修改文件列表
+    syscall.h
+    syscall.c
+    usys.S
+    user.h
+    sys_hello.c
+    hello.c
+    Makefile
