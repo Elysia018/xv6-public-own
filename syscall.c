@@ -103,6 +103,7 @@ extern int sys_unlink(void);
 extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
+extern int sys_hello(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -126,12 +127,14 @@ static int (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+[SYS_hello]   sys_hello,
 };
 
 void syscall(void)
 {
     int num;
     struct proc *curproc = myproc();
+    extern int sys_hello(void);
     static int logged_pid = -1; // 用来标记已经打过日志的进程
 
     num = curproc->tf->eax;
